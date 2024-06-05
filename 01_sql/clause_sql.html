@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="fr">
 
 <head>
@@ -709,6 +709,215 @@
                     </ul>
                 </div>
 
+            </div>
+            <div class="row border border-dark p-5">
+                <div class="col-sm-12">
+                    <h2 class="text-center">13 - Requête imbriquées</h2>
+                    <hr>
+                </div>
+                <div class="col-sm-12 mt-5">
+                   <ul>
+                    <li>
+                        Consiste à éxécuter une requête à l'interieur d'une autre requête, encapsulée dans une autre requête, il  n'y a pas de limite dans le nombre de niveaux d'imbrication
+                    </li>
+                    <li>
+                        le resultat de chaque requête imbriquée sert de valeur de référence dans la condition de sélection  requête de niveau supérieur, appelée requèête principale
+                    </li>
+                    <li>
+                        Afin d'avoir un cas concret et un contexte favorable à ce type de requête, nous allons modeliser la base de données d'une bibliothéque
+                    </li>
+                   </ul>
+                   <h4 class="text-center">
+                        1 - Une BDD bibliotheque
+                   </h4>
+                   <p>Le sujet d'une BDD bibliotheque</p>
+                   <ul>
+                    <li>
+                        Une table de <strong>livres</strong>
+                    </li>
+                    <li>
+                        Une table des <strong>abonnes</strong>
+                    </li>
+                    <li>
+                        Une table <strong>emprunt</strong> qui perment de sqvoir quel livre a été emprunté par quel abonnée et à quel date
+                    </li>
+                   </ul>
+                   <p class="alert alert-danger">Ici, on commence à modelisation notre base de données en réflichissant à ce qui va aller dedans</p>
+                </div>
+                <div class="col-sm-12 row">
+                    <div class="col-sm-12 col-md-4">
+                        <img src="assets/img/abonne.png" alt="Image représentant la table abonnes" class="img-fluid">
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <img src="assets/img/livre.png" alt="Image représentant la table livres" class="img-fluid">
+                    </div>
+                    <div class="col-sm-12 col-md-4">
+                        <img src="assets/img/emprunt.png" alt="Image représentant la table emprunt" class="img-fluid">
+                    </div>
+                </div>
+                <div class="col-sm-12">
+                    <ul>
+                        <li>
+                            <h6>Création de la BDD</h6>
+                            <strong>
+                                <code>
+                                    -&gt; CREATE DATABASE IF NOT EXISTS bibliotheque DEFAULT CHARACTER SET = 'utf8mb4';
+                                </code>
+                            </strong>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <ul>
+                        <li>
+                            <h6>Création de la premièr table abonnes</h6>
+                            <strong>
+                                <code>
+                                    -&gt; CREATE TABLE abonnes(
+                                        id_abonne INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary Key',
+                                        prenom VARCHAR(20) NOT NULL
+                                    );
+                                </code>
+                            </strong>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <ul>
+                        <li>
+                            <h6>Création de la deuxeième table livres</h6>
+                            <strong>
+                                <code>
+                                    -&gt; CREATE TABLE livres(
+                                        id_livre INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT COMMENT 'Primary Key',
+                                        auteur VARCHAR(30) NOT NULL,
+                                        titre VARCHAR(30) NOT NULL
+                                    ) ;
+                                </code>
+                            </strong>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <ul>
+                        <li>
+                            <h6>Création de la troiseme table emprint</h6>
+                            <strong>
+                                <code>
+                                    -&gt;CREATE TABLE emprunt(
+                                        id_emprunt INT(11) NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                                        date_sortie DATE() NOT NULL,
+                                        date_rendu DATE() NULL
+                                    ) ;
+                                </code>
+                            </strong>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <ul>
+                        <li>
+                            <h6>Création clé étrangères</h6>
+                            <ul>
+                                <li>
+                                    Dans la table emprunt, id_livre sera un cham^clé étranger en réference au champ id_livre de la table livres <br>
+                                    <strong>
+                                        <code>
+                                            -&gt; ALTER TABLE emprunt ADD FOREIGN KEY (id_livre) REFERENCES bibliotheque.livres(id_livre)
+                                        </code>
+                                    </strong>
+                                </li>
+                                <li>
+                                    Dans la table emprunt, id_abonne sera un champ clé étranger en réference au champ id_abonne de la table abonnes<br>
+                                    <strong>
+                                        <code>
+                                            -&gt; ALTER TABLE emprunt ADD FOREIGN KEY (id_abonne) REFERENCES bibliotheque.abonnes(id_aboone)
+                                        </code>
+                                    </strong>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-sm-12 col-md-12 mt-5">
+                   <h6 class="text-center">Inserer des données dans les tables</h6>
+                </div>
+                <div class="col-sm-12 col-md-4">
+                    <ul>
+                        <li>
+                            <strong>
+                                <code>
+                                    INSERT INTO abonnes (prenom) VALUES <br>
+                                    ('Guillaum'),<br>
+                                    ('Benoit'),<br>
+                                    ('Patrick'),<br>
+                                    ('Jalloul'),<br>
+                                    ('Jamila')<br>
+                                </code>
+                            </strong>
+                        </li>
+                    </ul>
+                 </div>
+                 <div class="col-sm-12 col-md-4">
+                    <ul>
+                        <li>
+                            <strong>
+                                <code>
+                                    INSERT INTO livres (id_livre, auteur, titre) VALUES <br>
+                                        (100, 'GUY DE MAUPASSANT', 'Une vie'), <br>
+                                        (101, 'GUY DE MAUPASSANT', 'Bel-Ami '), <br>
+                                        (102, 'HONORE DE BALZAC', 'Le père Goriot'), <br>
+                                        (103, 'ALPHONSE DAUDET', 'Le Petit chose'), <br>
+                                        (104, 'ALEXANDRE DUMAS', 'La Reine Margot'), <br>
+                                        (105, 'ALEXANDRE DUMAS', 'Les Trois Mousquetaires');
+  
+                                </code>
+                            </strong>
+                        </li>
+                    </ul>
+                 </div>
+                 <div class="col-sm-12 col-md-4">
+                    <ul>
+                        <li>
+                            <strong>
+                                <code>
+                                    INSERT INTO emprunt (id_emprunt, id_livre, id_abonne, date_sortie, date_rendu) VALUES <br>
+                                (NULL, 100, 1, '2014-12-17', '2014-12-18'), <br>
+                                (NULL, 101, 2, '2014-12-18', '2014-12-20'), <br>
+                                (NULL, 100, 3, '2014-12-19', '2014-12-22'), <br>
+                                (NULL, 103, 4, '2014-12-19', '2014-12-22'), <br>
+                                (NULL, 104, 1, '2014-12-19', '2014-12-28'), <br>
+                                (NULL, 105, 2, '2015-03-20', '2015-03-26'), <br>
+                                (NULL, 105, 3, '2015-06-13', NULL), <br>
+                                (NULL, 100, 2, '2015-06-15', NULL);
+  
+                                </code>
+                            </strong>
+                        </li>
+                    </ul>
+                 </div>
+                 <div class="col-sm-12 mt-5">
+                    <h6>Examples de requêtes</h6>
+                    <ul>
+                        <li>
+                            On cherche les livres qui n'ont pas encore été rendu
+                            <strong>
+                                <code>
+                                    -&gt;SELECT id_livre FROM emprunt WHERE date_rendu IS NULL; <!-- 100 et 105-->
+                                </code>
+                            </strong>
+                        </li>
+                        <li class="alert alert-danger">
+                            Pour trouver un résultat est null on utilise le terme <em>IS</em>
+                            <code>
+                                -&gt;SELECT id_livre FROM emprunt WHERE date_rendu IS NULL;
+                            </code> ne retourne aucun résultat
+                        </li>
+                        <li>
+                            On cherche les titres des livres qui n'ont pas étét rendu
+                        </li>
+                    </ul>
+                 </div>
             </div>
         </main>
     </div>
