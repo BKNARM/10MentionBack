@@ -220,82 +220,184 @@
                   <h3 class="text-center mb-5">BDD haribos</h3>
                   <ul>
                     <li>lister toutes les BDD de PHPMyAdmin <br>
-
+                        SHOW DATABASE;
                     </li>
                     <li>
                         Créer une base de données SQL nommée HARIBO <br>
-
+                        CREATE DATABASE haribo;
                     </li>
                     <li>
                         <div class="row">
                             <p class="col-sm-12"> Créer les tables stagiaires, bonbons et mange_bonbon </p>
                             <div class="col-sm-4">
-
+                                    <code> -> CREATE TABLE stagiaires(
+                                        <br>
+                                        id_stagiaire INT NOT NULL PRIMARY KEY AUTO_INCREMENT, <br> prenom VARCHAR(100) NOT NULL, <br> yeux VARCHAR(30) NOT NULL, <br> genre enum('m', 'f') NOT NULL <br> ); 
+                                    </code>
+                            </div>   
+                            <div class="col-sm-4">
+                                    <code>
+                                    -> create table bonbons(<br>
+                                            id_bonbon INT NOT NULL PRIMARY KEY AUTO_INCREMENT, <br>
+                                            nom VARCHAR(100) NOT NULL, <br> saveur VARCHAR(100) NOT NULL <br> );
+                                    </code>
                             </div>
                             <div class="col-sm-4">
-
-                            </div>
-                            <div class="col-sm-4">
-
+                                    <code>
+                                        -> CREATE TABLE mange_bonbon( <br> id_mange_bonbon INT(11) PRIMARY KEY AUTO_INCREMENT NOT NULL, <br>
+                                                id_bonbon INT(11) DEFAULT NULL,  <br>
+                                                id_stagiaire INT(11) DEFAULT NULL,  <br>
+                                                date_manger DATE NOT NULL, <br>
+                                                quantite INT(11) NOT NULL <br> );
+                                    </code>
                             </div>
                         </div>
                     </li>
                     <li>
                         <div class="row">
-                            <p>Insérer dans ces tables les informations suivantes:</p>
+                            <p>Insérer dans ces tables les informations suivantes:</p> 
                             <div class="col-sm-4">
-
+                                <code>-> INSERT INTO stagiaires (prenom, yeux, genre) VALUES
+                                    ('jhordan', 'marron','m'), <br>
+                                    ('MohamedA', 'marron','m'), <br>
+                                    ('Anas', 'marron','m'), <br>
+                                    ('MohamedB', 'marron','m'), <br>
+                                    ('Mehdi', 'marron','m'), <br>
+                                    ('Mathieu', 'marron','m'), <br>
+                                    ('Hakim', 'marron','m'), <br>
+                                    ('Sonia', 'marron','f'), <br>
+                                    ('Julie', 'marron','f'), <br>
+                                    ('Assa', 'marron','f'), <br>
+                                    ('Magalie', 'marron','f'), <br>
+                                    ('Yvette', 'marron','f'); <br>
+        
+                                </code>
+                            </div> 
+                            <div class="col-sm-4">
+                                <code>                                      
+                                    -> INSERT INTO bonbons (nom, saveur) VALUES
+                                    ('dragibus', 'cola'), <br>
+                                    ('tagada', 'fraise'), <br>
+                                    ('bams', 'banane'), <br>
+                                    ('rotella', 'reglisse'), <br>
+                                    ('floppys', 'sucre'), <br>
+                                    ('rainbollows', 'marshmallow'), <br>
+                                    ('bigharri', 'cerise'), <br>
+                                    ('oursor', 'fruits'), <br>
+                                    ('croco', 'fruits'), <br>
+                                    ('oeufoplat', 'guimauve'), <br>
+                                    ('flanbotti', 'caramel'); <br>
+                                </code>
                             </div>
                             <div class="col-sm-4">
-
-                            </div>
-                            <div class="col-sm-4">
-
+                                <code> 
+                                    -> INSERT INTO mange_bonbon (id_bonbon, id_stagiaire, date_manger, quantite) VALUES(4,7,'2018-12-20', 5), <br>
+                                    (1,1,'2018-12-05', 5), <br>
+                                    (2,2,'2018-12-03', 5), <br>
+                                    (3,3,'2018-12-04', 5), <br>
+                                    (5,4,'2018-12-15', 5), <br>
+                                    (6,5,'2018-12-18', 5), <br>
+                                    (7,6,'2018-12-22', 5), <br>
+                                    (8,8,'2018-12-25', 5), <br>
+                                    (9,9,'2018-12-24', 5), <br>
+                                    (10,10,'2018-12-01', 5), <br>
+                                    (11,11,'2018-12-06', 5); <br>
+                                </code>
                             </div>
                         </div>
                     </li>
                     <li>
                         Lister les tables de la BDD *haribo* <br>
-
+                        <strong>
+                            <code>
+                                SHOW TABLES FROM haribo;
+                            </code>
+                        </strong>
                     </li>
                     <li>
                         voir les paramètres de la table *bonbon* <br>
-
+                        <strong>
+                            <code>
+                                SELECT * FROM bonbons;
+                            </code>
+                        </strong>
                      </li>
                      <li>
                         Sélectionner tous les champs de tous les enregistrements de la table *stagiaire* <br>
-
+                        <strong>
+                            <code>
+                                SELECT * FROM stagiaire;
+                            </code>
+                        </strong>
 
                      </li>
                      <li>
                         Rajouter un nouveau stagiaire *Patriiiick* en forçant la numérotation de l'id <br>
+                        <!-- 100, vert , m -->
+                        <strong>
+                            <code>
+                                INSERT INTO stagiaires (id_stagiaire, prenom, yeux, genre) VALUES ('100', 'Patriiiiick', 'vert', 'm');<br> 
 
+                            </code>
+                        </strong>
                      </li>
                      <li>
                         Rajouter un nouveau stagiaire *Mila* SANS forcer la numérotation de l'id <br>
+                        <!-- bleu, f -->
+                        <strong>
+                            <code>
+                                INSERT INTO stagiaires (prenom, yeux, genre) VALUES ('Mila', 'bleu','f');
 
+                            </code>
+                        </strong>
 
                      </li>
                      <li>
                         Changer le prénom du stagiaire qui a l'id 100 de *Patriiiick* à *Patrick* <br>
+                        <strong>
+                            <code>
+                                UPDATE stagiaires SET prenom = 'Patrick' WHERE id_stagiaire = 100; <br>
 
+                            </code>
+                        </strong>
 
                      </li>
                      <li>
                         Rajouter dans la table manger que Patrick a mangé 5 Tagada purple le 15 septembre <br>
+                        <strong>
+                            <code>
+                                INSERT INTO bonbons (nom, saveur) VALUES ('tagada', 'violet');
+                                INSERT INTO mange_bonbon (id_stagiaire, date_manger, quantite ) VALUES (100, '2018-09-15', 5);
 
+
+                            </code>
+                        </strong>
                      </li>
                      <li>
                         Sélectionner tous les noms des bonbons <br>
+                        <strong>
+                            <code>
+                                SELECT * FROM bonbons
 
+                            </code>
+                        </strong>
                      </li>
                      <li>
                         Sélectionner tous les noms des bonbons en enlevant les doublons <br>
+                        <strong>
+                            <code>
+                                SELECT DISTINCT nom FROM bonbons;
 
+                            </code>
+                        </strong>
                      </li>
                      <li>
                         Récupérer les couleurs des yeux des stagiaires (Sélectionner plusieurs champs dans une table) <br>
-
+                        <strong>
+                            <code>
+                                SELECT DISTINCT yeux FROM stagiaires;  
+                            </code>
+                        </strong>
                      </li>
                      <li>
                         Dédoublonner un résultat sur plusieurs champs <br>
