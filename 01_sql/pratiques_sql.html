@@ -767,7 +767,16 @@
                     </li>
                     <li>
                         Afficher cette fois le total de "tagada" consommées <br>
-
+                        <strong>
+                            <code>
+                                SELECT COUNT(quantite) AS nbr_consommation FROM mange_bonbon WHERE id_bonbon IN (SELECT id_bonbon FROM bonbons WHERE nom = 'tagada')
+                            </code>
+                        </strong>
+                        <strong>
+                            <code>
+                                SELECT SUM(quantite) AS nbr_consommation FROM mange_bonbon WHERE id_bonbon IN (SELECT id_bonbon FROM bonbons WHERE nom = 'tagada')
+                            </code>
+                        </strong>
                     </li>
 
                     <li>
