@@ -46,7 +46,7 @@
                             </ul>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Inscription</a>
+                            <a class="nav-link" href="register.php">Inscription</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" href="#">Connexion</a>
