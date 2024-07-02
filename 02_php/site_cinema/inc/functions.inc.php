@@ -2,7 +2,17 @@
 
 <?php
 
-session_start()
+session_start();
+
+#############################constante pour definir le chemin du site#############################
+
+
+ // constante qui définit les dosiiers dans lesquels se situe le site pour pouvoir déterminer des chemins absolus à partir de localhost (on ne prends localhost). Ainsi nous écrivons tous les chemins (exp : src, href ) en absolu avec cette constante
+
+define("RACINE_SITE", "http://10mentionback.local/02_php/site_cinema/");
+
+
+
 function debug($var){
     echo '<pre class="border border-dark bg-light text-primary w-50 p-5 mt-5">';
     var_dump($var);
@@ -20,6 +30,19 @@ function alert(string $contenu, string $class){
 
 
 }
+
+
+
+#############################Fonction pour la deconnexion#############################
+
+function logOut(){
+    if(isset($_GET['action']) && $_GET['action'] == "deconnexion"){
+        unset($_SESSION['user']);
+        header('location:index.php'); 
+    }
+}
+
+logOut();
 
 
 #############################Fonction pour la connexion à la BDD#############################
@@ -54,7 +77,7 @@ function connexionBDD()
     try { // dans le try on vas instancier PDO, c'est créer un objet de la classe PDO (un élment de PDO)
         // avec la variable dsn et les constatntes d'environnement
         $pdo = new PDO($dsn, DBUSER, DBPASS); //dsn = data source mail
-        echo "je suis connecté";
+        // echo "je suis connecté";
 
         //On définit le mode d'erreur de PDO sur Exception
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -270,5 +293,47 @@ function checkUser(string $pseudo, string $email) : mixed {
 
     return $result;
 }
+
+
+
+############################################Fonction pour récupérer tout les utilisateurs###########################################
+
+function allUsers ():mixed {
+
+    $cnx = connexionBDD();
+    $sql = "SELECT * FROM users";
+    $request = $cnx->query($sql);
+    $result = $request->fetchAll();
+
+
+    return $result;// fetchAll() récupère tout les résultats dans la reqûête et les sort sous forme d'un tableau à 2 dismensions
+
+}
+
+
+############################################Fonction pour supprimer un utilisateur###########################################
+
+function deleteUser(int $id_user) :void{
+    
+        
+        $cnx = connexionBDD();
+        
+        
+        $sql = "DELETE FROM users WHERE id_user = :id_user";
+        $request = $cnx->prepare($sql);
+        
+        
+        $request->execute(array(
+            ':id_user' => $id_user
+        ));
+        $result = $request->fetch();
+        
+    
+}
+deleteUser($_GET['id_user']);
+
+
+
+
 
 ?>
