@@ -277,3 +277,18 @@ th {
     opacity: 0 !important;
     transition: all .5s;
 }
+
+
+
+/* ********************************************TEXTAREA****************************************************** */
+
+/* #textArea{
+    width: 400px;
+    height: 45px;
+} */
+
+
+element.style {
+    height: 384px;
+    background-color: red;
+}

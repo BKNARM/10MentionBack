@@ -9,7 +9,7 @@ session_start();
 
  // constante qui définit les dosiiers dans lesquels se situe le site pour pouvoir déterminer des chemins absolus à partir de localhost (on ne prends localhost). Ainsi nous écrivons tous les chemins (exp : src, href ) en absolu avec cette constante
 
-define("RACINE_SITE", "http://10mentionback.local/02_php/site_cinema/");
+define("RACINE_SITE", "http://localhost/10MentionBack/02_php/site_cinema/");
 
 
 
@@ -195,11 +195,48 @@ function inscriptionUsers(string $lastName, string $firstName, string $pseudo, s
         1- On prépare la requête
         2- On lie le marqueur à la requête
         3- On exécute la requête
-
-
-
-
     */
+
+    // Créer un tableau associatif avec les noms des colonnes comme clés
+    // Les noms des clés du tableau $data correspondent aux noms des colonnes dans la base de données.
+    
+    $data = [
+        'firstName' => $firstName,
+        'lastName' => $lastName,
+        'pseudo' => $pseudo,
+        'mdp' => $mdp,
+        'email' => $email,
+        'phone' => $phone,
+        'civility' => $civility,
+        'birthday' => $birthday,
+        'address' => $address,
+        'zip' => $zip,
+        'city' => $city,
+        'country' => $country
+    ];
+
+    // echapper les données et les traiter contre les failles JS (XSS)
+
+    foreach ($data as $key => $value) {
+
+        $data[$key] = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+        
+        // 1 -> $data['firstName] = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+        /* 
+            htmlspecialchars est une fonction qui convertit les caractères spéciaux en entités HTML, cela est utilisé afin d'empêcher l'exécution de code HTML ou JavaScript : les attaques XSS (Cross-Site Scripting) injecté par un utilisateur malveillant en échappant les caractères HTML potentiellement dangereux . Par défaut, htmlspecialchars échappe les caractères suivants :
+
+            & (ampersand) devient &amp;
+            < (inférieur) devient &lt;
+            > (supérieur) devient &gt;
+            " (guillemet double) devient &quot;*/
+
+        /*
+            ENT_QUOTES : est une constante en PHP  qui onvertit les guillemets simples et doubles. => ' (guillemet simple) devient &#039; 
+            'UTF-8' : Spécifie que l'encodage utilisé est UTF-8.
+        */
+    }
+
+
 
 
     $cnx = connexionBDD();
@@ -211,18 +248,18 @@ function inscriptionUsers(string $lastName, string $firstName, string $pseudo, s
     //$requet est à cette ligne  encore un objet PDOstatement.
     
     $request->execute(array(
-        ":lastName"=>$lastName, 
-        ":firstName"=>$firstName, 
-        ":pseudo"=> $pseudo,
-        ":email"=> $email,
-        ":phone"=> $phone,
-        ":mdp"=> $mdp,
-        ":civility"=>$civility, 
-        ":birthday"=>$birthday, 
-        ":address"=>$address, 
-        ":zip"=>$zip, 
-        ":city"=>$city, 
-        ":country"=>$country,
+        ':firstName' => $data['firstName'],
+        ':lastName' => $data['lastName'],
+        ':pseudo' => $data['pseudo'],
+        ':mdp' => $data['mdp'],
+        ':email' => $data['email'],
+        ':phone' => $data['phone'],
+        ':civility' => $data['civility'],
+        ':birthday' => $data['birthday'],
+        ':address' => $data['address'],
+        ':zip' => $data['zip'],
+        ':city' => $data['city'],
+        ':country' => $data['country'],
     ));//execute() permet d'éxecuter toute la requête préparée avec prepare()
 }
 // inscriptionUsers();
@@ -330,9 +367,128 @@ function deleteUser(int $id_user) :void{
         
     
 }
-deleteUser($_GET['id_user']);
+############################################Fonction pour supprimer un utilisateur###########################################
+
+function updateRole(string $role, int $id_user) :void{
+    
+        
+    $cnx = connexionBDD();
+    $sql = "UPDATE users SET role = :role WHERE id_user = :id_user";
+    $request = $cnx->prepare($sql);
+    $request->execute(array(
+        ':role' => $role,
+        ":id_user" => $id_user
+    ));
+    
+    
+
+}
+######################################################### fonction pour recupperer un seul utilisateur###################################################
+
+function showUser(int $id_user) :mixed{
+    
+        
+    $cnx = connexionBDD();
+    $sql = "SELECT * FROM users WHERE id_user = :id_user";
+    $request = $cnx->prepare($sql);
+    $request->execute(array(
+        ":id_user" => $id_user
+    ));
+    $result = $request->fetch();
+    return $result;
+    
+    
+
+}
+
+###################################################Fonction pour les categories##########################################################################
 
 
+function lesCategories ():mixed {
+
+    $cnx = connexionBDD();
+    $sql = "SELECT * FROM categories";
+    $request = $cnx->query($sql);
+    $result = $request->fetchAll();
+
+
+    return $result;// fetchAll() récupère tout les résultats dans la reqûête et les sort sous forme d'un tableau à 2 dismensions
+
+}
+
+
+function ajoutCategories(string $name, string $description ) : void{
+
+    
+
+
+    $cnx = connexionBDD();
+    $sql = "INSERT INTO categories (name, description) VALUES (:name, :description)";
+
+    $request = $cnx -> prepare($sql);
+    
+    
+    $request->execute(array(
+        ":name"=>$name,
+        ":description"=>$description 
+        
+    ));
+}
+
+#######################################Fonction modification user#############################################################
+
+function modificationUsers(string $lastName, string $firstName, string $pseudo, string $email, string $phone, string $mdp, string $civility, string $birthday, string $address, string $zip, string $city, string $country) : void{
+
+ 
+    $data = [
+        'firstName' => $firstName,
+        'lastName' => $lastName,
+        'pseudo' => $pseudo,
+        'mdp' => $mdp,
+        'email' => $email,
+        'phone' => $phone,
+        'civility' => $civility,
+        'birthday' => $birthday,
+        'address' => $address,
+        'zip' => $zip,
+        'city' => $city,
+        'country' => $country
+    ];
+
+   
+
+    foreach ($data as $key => $value) {
+
+        $data[$key] = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+        
+        
+    }
+
+
+
+
+    $cnx = connexionBDD();
+    $sql = "UPDATE users
+    (lastName, firstName, pseudo, email, phone, mdp, civility, birthday, address, zip, city, country) VALUES (:lastName, :firstName, :pseudo, :email, :phone, :mdp, :civility, :birthday, :address, :zip, :city, :country)";
+
+    $request = $cnx -> prepare($sql);
+   
+    
+    $request->execute(array(
+        ':firstName' => $data['firstName'],
+        ':lastName' => $data['lastName'],
+        ':pseudo' => $data['pseudo'],
+        ':mdp' => $data['mdp'],
+        ':email' => $data['email'],
+        ':phone' => $data['phone'],
+        ':civility' => $data['civility'],
+        ':birthday' => $data['birthday'],
+        ':address' => $data['address'],
+        ':zip' => $data['zip'],
+        ':city' => $data['city'],
+        ':country' => $data['country'],
+    ));
+}
 
 
 

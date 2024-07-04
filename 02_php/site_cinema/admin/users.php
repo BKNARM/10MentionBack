@@ -9,15 +9,25 @@ $users = allUsers();
 if(isset($_GET) && isset($_GET['action']) && isset($_GET['id_user'])){
 
     if ($_GET['action'] == 'delete' && !empty($_GET['id_user'])) {
-        htmlentities();
-        $id_user = htmlentities($_GET['id_user']);
+        
+        $idUser = htmlentities($_GET['id_user']);
         deleteUser($idUser);
-        /*
-           htmlentities :convertit tous les caractères applicables en entités HTML. Cela inclut non seulement les caractères spéciaux comme htmlspecialchars, mais aussi d'autres caractères qui ont des entités HTML (comme les caractères accentués) exemple.
+        
+    }
+    if ($_GET['action'] == 'update' && !empty($_GET['id_user'])) {
+        
+        $idUser = htmlentities($_GET['id_user']);
+        $user = showUser($idUser);
 
-            é devient &eacute;
-            © devient &copy;
-        */
+        if ($user['role'] == 'ROLE_ADMIN') {
+            updateRole('ROLE_USER', $idUser);
+        }else {
+            updateRole('ROLE_ADMIN', $idUser);
+        }
+        
+    }
+
+    header('location:users.php');
 }
 
 
@@ -29,7 +39,7 @@ if(isset($_GET) && isset($_GET['action']) && isset($_GET['id_user'])){
     <table class="table  table-dark table-bordered mt-5">
         <thead>
             <tr>
-                <!-- th*7 -->
+                <!-- th*14 -->
                 <th>ID</th>
                 <th>FirstName</th>
                 <th>LastName</th>
@@ -71,6 +81,11 @@ if(isset($_GET) && isset($_GET['action']) && isset($_GET['id_user'])){
                     <th><?= $user['country']?></th>
                     <th><?= $user['role']?></th>
                     <td class="text-center"><a href="?action=delete&id_user=<?= $user['id_user']?>"><i class="bi bi-trash3"></i></a></td>
+                    <td class="text-center">
+                        <a class="btn btn-danger" href="?action=update&id_user=<?= $user['id_user']?>">
+                            <?=$user['role'] == 'ROLE_ADMIN' ? 'Rôle_user' : 'Rôle_admin' ?>
+                        </a>
+                    </td>
                 </tr>
 
             <?php

@@ -34,7 +34,7 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav w-100 d-flex justify-content-end">
                         <li class="nav-item">
-                            <a class="nav-link " aria-current="page" href="#">Accueil</a>
+                            <a class="nav-link " aria-current="page" href="<?= RACINE_SITE ?>index.php">Accueil</a>
                         </li>
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="<?= RACINE_SITE ?>index.php" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -68,7 +68,8 @@
                         ?>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= RACINE_SITE ?>profil.php">Compte</a>
+                                <a class="nav-link" href="<?= RACINE_SITE ?>profil.php">Compte<span class="badge rounded-pill text-bg-danger">Danger</span>
+                                </a>
                             </li>
 
 
@@ -98,7 +99,7 @@
                             </li>
                         <?php
 
-                            debug($_GET['action']);
+                           
                         }
 
                         ?>
