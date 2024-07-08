@@ -38,7 +38,7 @@ function alert(string $contenu, string $class){
 function logOut(){
     if(isset($_GET['action']) && $_GET['action'] == "deconnexion"){
         unset($_SESSION['user']);
-        header('location:index.php'); 
+        header('location:'.RACINE_SITE. 'index.php'); 
     }
 }
 
@@ -47,7 +47,7 @@ logOut();
 
 #############################Fonction pour la connexion à la BDD#############################
 
-// On vas utiliser l'extension PHP Data Objects (PDO), elle définit une excellente interface pour accéder à une base de données depuis PHP et d'exécuter des requêtes SQL .
+// On va utiliser l'extension PHP Data Objects (PDO), elle définit une excellente interface pour accéder à une base de données depuis PHP et d'exécuter des requêtes SQL .
 // Pour se connecter à la BDD avec PDO il faut créer une instance de cet Objet (PDO) qui représente une connexion à la base,  pour cela il faut se servir du constructeur de la classe
 // Ce constructeur demande certains paramètres:
 // On déclare des constantes d'environnement qui vont contenir les information à la connexion à la BDD
@@ -72,7 +72,7 @@ function connexionBDD()
 
     $dsn = "mysql: host=" . DBHOST . ";dbname=" . DBNAME . ";charset=utf8;";
 
-    //Grâce à PDO(classe naative PHP) on peut lever une exception (une erreur) si la connexion à la BDD ne se réalise pas(exp: suite à une faute au niveau du nom de la BDD) et par la suite si elle cette erreur est capté on lui demande d'afficher une erreur
+    //Grâce à PDO(classe native PHP) on peut lever une exception (une erreur) si la connexion à la BDD ne se réalise pas(exp: suite à une faute au niveau du nom de la BDD) et par la suite si elle cette erreur est capté on lui demande d'afficher une erreur
 
     try { // dans le try on vas instancier PDO, c'est créer un objet de la classe PDO (un élment de PDO)
         // avec la variable dsn et les constatntes d'environnement
@@ -85,11 +85,11 @@ function connexionBDD()
 
         $pdo->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
         
-    } catch (PDOException $e) { // PDOException est une classe qui représente une erreur émise par PDO et $e c'est l'objetde la clase en question qui vas stocker cette erreur
+    } catch (PDOException $e) { // PDOException est une classe qui représente une erreur émise par PDO et $e c'est l'objet de la classe en question qui vas stocker cette erreur
         die("Erreur : " . $e->getMessage()); // die d'arrêter le PHP et d'afficher une erreur en utilisant la méthode getmessage de l'objet $e
     }
 
-    //le catch sera exécuter dès lors on aura un problème da le try
+    //le catch sera exécuter dès lors on aura un problème dans le try
 
 
     return $pdo; //ici on utilise un return car on récupère l'objet de la fonction que l'on vas appelé  dans plusieurs autre fonctions
@@ -489,6 +489,101 @@ function modificationUsers(string $lastName, string $firstName, string $pseudo, 
         ':country' => $data['country'],
     ));
 }
+
+
+
+
+
+
+function showCategory(string $name){
+
+    $cnx = connexionBdd();
+    $sql = "SELECT * FROM categories WHERE name = :name";
+    $request = $cnx->prepare($sql);
+    $request->execute(array(
+        ":name" => $name
+    ));
+    $result = $request->fetch();
+    return $result;
+
+}
+
+///////////////////////////////////////////  fonction pour insérer une catégorie //////////////////////////////////////////
+
+function addCategory(string $nameCategory, string $description) : void {
+
+    $pdo = connexionBdd();
+    $sql= "INSERT INTO categories (name, description) VALUES (:name, :description)"; // requête d'insertion que je stock dans une variable
+    $request = $pdo->prepare($sql); // je prépare ma fonction et je l'exécute
+    $request->execute(array(
+
+            ':name' => $nameCategory,
+            ':description' => $description
+    ));
+
+}
+
+//////////////////////////////////////// Une fonction pour récupérer toutes les catégories //////////////////////////////////////////////
+
+function allCategories() : mixed{
+        
+    $pdo = connexionBdd();
+    $sql= "SELECT * FROM categories"; // requête d'insertion que je stock dans une variable
+    $request = $pdo->query($sql); 
+    $result = $request->fetchAll();// j'utilise fetchAll() pour récupérer toute les ligne à la fois 
+    return $result; // ma fonction retourne un tableau ave les données récupérer de la BDD
+}
+
+//////////////////////////////////////// Une fonction pour supprimer une catégorie//////////////////////////////////////////////
+
+function deleteCategory(int $id) :void {
+
+    $pdo = connexionBdd();
+    $sql = "DELETE FROM categories WHERE id_category = :id";
+    $request = $pdo->prepare($sql);
+    $request->execute(array(
+        ':id' => $id
+    ));
+
+
+}
+
+//////////////////////////////////////// Une fonction pour modifier une catégorie//////////////////////////////////////////////
+
+
+function updateCategory(int $id, string $name, string $description) :void {
+
+    $pdo = connexionBdd();
+    $sql = "UPDATE categories SET name = :name, description = :description WHERE id_category = :id";
+    $request = $pdo->prepare($sql);
+    $request->execute(array(
+        ':id' => $id,
+        ':name'=> $name,
+        ':description' => $description
+    ));
+
+
+}
+
+
+//////////////////////////////////////// Une fonction pour modifier une catégorie//////////////////////////////////////////////
+
+function showCategoryViaId(int $id) :mixed {
+
+    $pdo = connexionBdd();
+    $sql = "SELECT * FROM categories WHERE id_category = :id_category";
+    $request = $pdo->prepare($sql);
+    $request->execute(array(
+        ':id_category' => $id
+        
+    ));
+    $result = $request->fetch();
+    return $result;
+
+
+}
+
+
 
 
 

@@ -68,7 +68,7 @@
                         ?>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= RACINE_SITE ?>profil.php">Compte<span class="badge rounded-pill text-bg-danger">Danger</span>
+                                <a class="nav-link" href="<?= RACINE_SITE ?>profil.php">Compte<sup class="badge rounded-pill text-bg-danger"><?= $_SESSION['user']['firstName']?></sup>
                                 </a>
                             </li>
 

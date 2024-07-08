@@ -1,7 +1,6 @@
 <?php
 
 require_once "inc/functions.inc.php";
-require_once "inc/header.inc.php";
 
 $info = "";
 $info2 = "";
@@ -75,6 +74,7 @@ if (!empty($_POST)) {
 
 
 
+require_once "inc/header.inc.php";
 
 
 ?>
