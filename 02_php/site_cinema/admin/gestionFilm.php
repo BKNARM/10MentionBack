@@ -20,7 +20,7 @@ $info = "";
 
 if (!empty($_POST)) {
 
-    die();
+    
     $verif = true;
     foreach ($_POST as $key => $value) {
         if (empty(trim($value))) {
@@ -29,13 +29,18 @@ if (!empty($_POST)) {
     }
 
     // la superglobale $_FILES a un indice "image" qui correspond au "name" de l'input type="file" du formulaire, ainsi qu'un indice "name" qui contient le nom du fichier en cours de téléchargement.
-    if (!empty($_FILES['image']['name'])) { //si le nom du fichier en cours de téléchargement n'est pas vide, alors c'est qu'on est en train de télécharger une photo
+    // Vérifie si le champ 'image' du tableau $_FILES n'est pas vide, ce qui signifie qu'un fichier est en cours de téléchargement.
+    if (!empty($_FILES['image']['name'])) {  // $_FILES['image']['name'] contient le nom original du fichier téléchargé.
 
-        $image = 'img/' . $_FILES['image']['name'];  // $image contient le chemin relatif de la photo et sera enregistré en BDD. On utilise ce chemin pour les "src" des balises <img>.
+        // Définit la variable $image avec le nom du fichier téléchargé.
+        // Cela crée le chemin relatif vers l'image qui sera utilisé pour stocker l'image et peut être utilisé dans les balises <img>.
+        $image =  $_FILES['image']['name'];
 
-        copy($_FILES['image']['tmp_name'], '../assets/' . $image);
+        // Utilise la fonction copy() pour copier le fichier temporaire téléchargé (stocké à l'adresse contenue dans $_FILES['image']['tmp_name'])
+        // vers un emplacement permanent. Le fichier est déplacé dans le dossier "../assets/img/" avec le nom original du fichier.
 
-        // on enregistre le fichier image qui se trouve à l'adresse contenue dans $_FILES['image']['tmp_name'] vers la destination qui est le dossier "img" à l'adresse "../asstes/nom_du_fichier.jpg".
+        // copy() prend deux arguments : le chemin source (le fichier temporaire) et le chemin de destination.
+        copy($_FILES['image']['tmp_name'], '../assets/img/' . $image); // $_FILES['image']['tmp_name'] contient le chemin temporaire où le fichier est stocké après le téléchargement.
     }
 
     if ($verif == false || empty($image)) {
@@ -50,19 +55,78 @@ if (!empty($_POST)) {
         // $_FILES ['image']['error'] Erreur si oui/non l'image a été réceptionné
 
 
-            // if ($_FILES['image']['terror'] !=  || $_FILES['image']['terror'] == 0 || !isset($_FILES) ) {
-            //     # code...
-            // }
+        if ($_FILES['image']['error'] != 0  || $_FILES['image']['size'] == 0 || !isset($_FILES ['image']['type']) ) {
+
+            $info .= alert("L'image n'est pas valide", "danger");
+        }
 
 
+        $titleFilm = ($_POST['title']);
+        $director = trim($_POST['director']);
+        $actors = trim($_POST['actors']);
+        $genre = trim($_POST['categories']);
+        $duration = trim($_POST['duration']);
+        $synopsis = trim($_POST['synopsis']);
+        $dateSortie = trim($_POST['date']);
+        $price = trim($_POST['price']);
+        $stock = trim($_POST['stock']);
+        $ageLimit = trim($_POST['ageLimit']);
 
+        $regex_chiffre = '/[0-9]/';
+        $regex_acteurs = '/.*\/.*/';
+
+        //Explications: 
+            //    .* : correspond à n'importe quel nombre de caractères (y compris zéro caractère), sauf une nouvelle ligne.
+            //     \/ : correspond au caractère /. Le caractère / doit être précédé d'un backslash \ car il est un caractère spécial en expression régulière. Le backslash est appelé caractère d'échappement et il permet de spécifier que le caractère qui suit doit être considéré comme un caractère ordinaire.
+            //     .* : correspond à n'importe quel nombre de caractères (y compris zéro caractère), sauf une nouvelle ligne.
+
+        if (!isset($titleFilm) || strlen($titleFilm) < 2) {
+            $info .= alert ("le champ titre n'est pas valide", "danger");
+        }
+
+        if (!isset($director) || strlen($director) < 2 || preg_match($regex_chiffre, $director)) {
+            $info .= alert ("le champ Réalisateur n'est pas valide", "danger");
+        }
+
+
+        if( strlen($actors) < 3 || preg_match($regex_chiffre, $actors) || !preg_match($regex_acteurs, $actors) ){ // valider que l'utilisateur a bien inséré le symbole '/' : chaîne de caractères qui contient au moins un caractère avant et après le symbole /.
+            
+            $info .= alert("Le champ acteurs n'est pas valide, il faut séparer les acteurs avec le symbole","danger");
+
+        }
+
+        if( !isset($genre) || showCategoryViaId($genre) == false){ 
+            $info .= alert("la categorie n'est pas valide","danger");
+
+        }
+
+
+        if (!isset($duration)) {
+            $info .= alert("La durée n'est pas valide", "danger");
+        }
+
+        if (!isset($dateSortie)) {
+            $info .= alert("La date n'est pas valide", "danger");
+        }
+
+        if (!isset($price) || !is_numeric($price)) {
+            $info .= alert("Le prix n'est pas valide", "danger");
+        }
+
+        if (!isset($synopsis) || !strlen($synopsis) > 50) {
+            $info .= alert("il faut que le résumée dépasse 50 caractères", "danger");
+        }elseif (empty($info)) {
+            
+            debug($genre);
+            debug($price);
+            debug($stock);
+            insertFilm($genre, $titleFilm, $director, $actors, $duration, $synopsis, $dateSortie, $price, $stock, $ageLimit, $image );
+        }
+        
     }
 }
 
-if ($verif == false) {
-    $info = alert("veuillez renseigner tous les champs", "danger");
-} else {
-}
+
 
 require_once "../inc/header.inc.php";
 ?>
