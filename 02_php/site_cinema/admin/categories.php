@@ -59,7 +59,7 @@ if (!empty($_POST)) { //si le formulaire est envoyé
 
             $name = strtolower($name);
             $name = htmlentities($name);
-            debug($name);
+           
 
             $categoriyBdd = showCategory($name);
             if ($categoriyBdd) {
@@ -68,7 +68,7 @@ if (!empty($_POST)) { //si le formulaire est envoyé
 
                 
                 $description = htmlentities($description);
-                if((isset($_GET) && $_GET['action'] =='update' && !empty($_GET['id_category']))){
+                if(isset($_GET) && $_GET['action'] =='update' && !empty($_GET['id_category'])){
 
                     $idCategory = htmlentities($_GET['id_category']);
                     updateCategory($idCategory, $name, $description);
@@ -99,11 +99,6 @@ if(isset($_GET) && isset($_GET['action']) && isset($_GET['id_category'])){
         
         
         $category = showCategoryViaID($idCategory);
-        
-        
-
-        
-        
     } 
 
     // header('location:categories.php');
@@ -146,7 +141,7 @@ require_once "../inc/header.inc.php";
         </form>
     </div>
 
-    <div class="col-sm-12 col-md-6 d-flex flex-column mt-5 pe-3">
+    <div class="col-sm-12 col-md-6 d-flex flex-column mt-5 pe-3 table-responsive">
         <!-- tableau pour afficher toute les catégories avec des boutons de suppression et de modification -->
         <h2 class="text-center fw-bolder mb-5 text-danger">Liste des catégories</h2>
 
@@ -156,7 +151,7 @@ require_once "../inc/header.inc.php";
         ?>
 
 
-        <table class="table table-dark table-bordered mt-5 ">
+        <table class="table table-dark table-bordered mt-5 table-responsive ">
             <thead>
                 <tr>
                     <!-- th*7 -->

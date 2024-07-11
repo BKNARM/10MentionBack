@@ -115,6 +115,22 @@ function creatTableCategories()
 
 creatTableCategories();
 
+
+
+#############################Fonction string array#############################
+
+
+function stringToArray(string $string ) :array{
+    
+    $array = explode('/', trim($string, '/')); // Je transforme ma châine de caractére en tableau et je supprime les / autour de la chaîne de caractére 
+    return $array; // ma fonction retourne un tableau
+
+}
+
+
+
+
+
 //creation de la table films
 function createTableFilms()
 {
@@ -678,7 +694,7 @@ function insertFilm(int $category_id, string $titleFilm, string $director, strin
 
 //////////////////////////////////////// Fonction pour insérer un film//////////////////////////////////////////////
 
-function recupFilm() : mixed{
+function allFilm() : mixed{
         
     $pdo = connexionBdd();
     $sql= "SELECT * FROM films"; // requête d'insertion que je stock dans une variable
@@ -724,8 +740,25 @@ function showFilm(int $id_film) :mixed {
 }
 
 
+//////////////////////////////////////// Fonction vérifiér sin un filme existe ou pas dans la Bdd//////////////////////////////////////////////
+
+
+function verifFilm(string $title, string $date ) :mixed{
+
+    $pdo = connexionBdd();
+    $sql = "SELECT * FROM films WHERE title = :title AND date = :date";
+    $request = $pdo->prepare($sql);
+    $request->execute(array(
+        ':title' => $title,
+        ':date'=> $date
+        
+    ));
+    $result = $request->fetch();
+    return $result;
 
 
 
+
+}
 
 ?>
