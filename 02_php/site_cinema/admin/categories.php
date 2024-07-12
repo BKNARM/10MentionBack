@@ -59,22 +59,21 @@ if (!empty($_POST)) { //si le formulaire est envoyé
 
             $name = strtolower($name);
             $name = htmlentities($name);
-           
+
 
             $categoriyBdd = showCategory($name);
             if ($categoriyBdd) {
                 $info = alert("la catégorie existe déjà", "danger");
             } else { // si elle n'esxiste pas on va l'insérer dans la BDD
 
-                
+
                 $description = htmlentities($description);
-                if(isset($_GET) && $_GET['action'] =='update' && !empty($_GET['id_category'])){
+                if (isset($_GET) && $_GET['action'] == 'update' && !empty($_GET['id_category'])) {
 
                     $idCategory = htmlentities($_GET['id_category']);
                     updateCategory($idCategory, $name, $description);
                     header('location:categories.php');
-
-                }else {
+                } else {
                     addCategory($name, $description);
                 }
             }
@@ -85,21 +84,40 @@ if (!empty($_POST)) { //si le formulaire est envoyé
 
 //suppression et modification d'une catégorie
 
-if(isset($_GET) && isset($_GET['action']) && isset($_GET['id_category'])){
+if (isset($_GET) && isset($_GET['action']) && isset($_GET['id_category']) && !empty($_GET['action']) && !empty($_GET['id_category'])) {
 
-    $idCategory= htmlentities($_GET['id_category']);
 
-    if ($_GET['action'] == 'delete' && !empty($_GET['id_category'])) {
-        
-        
-        deleteCategory($idCategory);
-        
-    }
-    if ($_GET['action'] == 'update' && !empty($_GET['id_category'])) {
-        
-        
+
+    $idCategory = htmlentities($_GET['id_category']);
+
+
+    if (is_numeric($id_category)) {
+
         $category = showCategoryViaID($idCategory);
-    } 
+        if ($category) {
+
+            if ($_GET['action'] == 'delete') {
+
+                deleteCategory($idCategory);
+
+            }
+            if ($_GET['action'] != 'update') {
+
+                header('location:categories.php');
+
+
+            }
+            
+        }else {
+
+            header('location:categories.php');
+        }
+
+        
+    } else {
+
+        header('location:categories.php');
+    }
 
     // header('location:categories.php');
 }
@@ -119,24 +137,24 @@ require_once "../inc/header.inc.php";
         <h2 class="text-center fw-bolder mb-5 text-danger">Gestion des catégories</h2>
 
         <?= $info; ?>
-        
+
         <form action="" method="post" class="back">
 
             <div class="row">
                 <div class="col-md-8 mb-5">
                     <label for="name">Nom de la catégorie</label>
                     <!-- <input type="text" id="name" name="name" class="form-control" value="<//?=isset($category) ? $category['name']: ''?>"> -->
-                    <input type="text" id="name" name="name" class="form-control" value="<?=$category['name'] ?? ''?>">
+                    <input type="text" id="name" name="name" class="form-control" value="<?= $category['name'] ?? '' ?>">
 
                 </div>
                 <div class="col-md-12 mb-5">
                     <label for="description">Description</label>
-                    <textarea id="description" name="description" class="form-control" rows="10"><?=isset($category) ? $category['description']: ''?></textarea>
+                    <textarea id="description" name="description" class="form-control" rows="10"><?= isset($category) ? $category['description'] : '' ?></textarea>
                 </div>
 
             </div>
             <div class="row justify-content-center">
-                <button type="submit" class="btn btn-danger p-3"><?=isset($category) ? 'Modifier une categorie': 'ajouter une catégorie'?></button>
+                <button type="submit" class="btn btn-danger p-3"><?= isset($category) ? 'Modifier une categorie' : 'ajouter une catégorie' ?></button>
             </div>
         </form>
     </div>
@@ -170,12 +188,12 @@ require_once "../inc/header.inc.php";
 
                     <tr>
 
-                        <td><?=$categorie['id_category']?></td>
-                        <td><?=html_entity_decode($categorie['name'])?></td> <!-- une majuscule sur la première lettre avec ucfirst()-->
-                        <td><?=substr(html_entity_decode($categorie['description']),0,100).'...' ?></td><!-- Convertit les entités HTML à leurs caractères correspondant
+                        <td><?= $categorie['id_category'] ?></td>
+                        <td><?= html_entity_decode($categorie['name']) ?></td> <!-- une majuscule sur la première lettre avec ucfirst()-->
+                        <td><?= substr(html_entity_decode($categorie['description']), 0, 100) . '...' ?></td><!-- Convertit les entités HTML à leurs caractères correspondant
                         -->
-                        <td class="text-center"><a href="?action=delete&id_category=<?=$categorie['id_category']?>"><i class="bi bi-trash3-fill"></i></a></td>
-                        <td class="text-center"><a href="?action=update&id_category=<?=$categorie['id_category']?>"><i class="bi bi-pen-fill"></i></a></td>
+                        <td class="text-center"><a href="?action=delete&id_category=<?= $categorie['id_category'] ?>"><i class="bi bi-trash3-fill"></i></a></td>
+                        <td class="text-center"><a href="?action=update&id_category=<?= $categorie['id_category'] ?>"><i class="bi bi-pen-fill"></i></a></td>
 
                     </tr>
 

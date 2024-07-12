@@ -724,7 +724,7 @@ function deleteFilm(int $id) :void {
 //////////////////////////////////////// Fonction pour modifier un film//////////////////////////////////////////////
 
 
-function showFilm(int $id_film) :mixed {
+function showFilm(int $id_film) {
 
     $pdo = connexionBdd();
     $sql = "SELECT * FROM films WHERE id_film = :id_film";
@@ -733,7 +733,7 @@ function showFilm(int $id_film) :mixed {
         ':id_film' => $id_film,
         
     ));
-    $result = $request->fetchAll();
+    $result = $request->fetch();
     return $result;
 
 
@@ -760,5 +760,102 @@ function verifFilm(string $title, string $date ) :mixed{
 
 
 }
+
+//////////////////////////////////////// Fonction vérifiér sin un filme existe ou pas dans la Bdd//////////////////////////////////////////////
+
+
+function modifierFilm(int $category_id, string $titleFilm, string $director, string $actors, string $duration, string $synopsis, string $dateSortie, float $price, int $stock, string $ageLimit, string $image) : void{
+
+
+    
+
+    /*Les requêtes préparer sont préconisées si vous exécutez plusieurs fois la même requête. Ainsi vous évitez au SGBD de répéter toutes les phases analyse/ interpretation / exécution de la requête (gain de performance). Les requêtes préparées sont aussi utilisées pour nettoyer les données et se prémunir des injections de type SQL.
+        1- On prépare la requête
+        2- On lie le marqueur à la requête
+        3- On exécute la requête
+        $titleFilm = ($_POST['title']);
+        $director = trim($_POST['director']);
+        $actors = trim($_POST['actors']);
+        $genre = trim($_POST['categories']);
+        $duration = trim($_POST['duration']);
+        $synopsis = trim($_POST['synopsis']);
+        $dateSortie = trim($_POST['date']);
+        $price = trim($_POST['price']);
+        $stock = trim($_POST['stock']);
+        $ageLimit = trim($_POST['ageLimit']);
+    */
+
+    // Créer un tableau associatif avec les noms des colonnes comme clés
+    // Les noms des clés du tableau $data correspondent aux noms des colonnes dans la base de données.
+    
+    $films = [
+        'category_id'=> $category_id,
+        'title' => $titleFilm,
+        'director' => $director,
+        'actors' => $actors,
+        // 'categories ' => $genre,
+        'duration' => $duration,
+        'synopsis' => $synopsis,
+        'date' => $dateSortie,
+        'price' => $price,
+        'stock' => $stock,
+        'ageLimit' => $ageLimit,
+        'image' => $image
+        
+    ];
+
+    // echapper les données et les traiter contre les failles JS (XSS)
+
+    foreach ($films as $key => $value) {
+
+        $data[$key] = htmlentities($value);
+        
+        // 1 -> $data['firstName] = htmlspecialchars($value, ENT_QUOTES, 'UTF-8');
+        /* 
+            htmlspecialchars est une fonction qui convertit les caractères spéciaux en entités HTML, cela est utilisé afin d'empêcher l'exécution de code HTML ou JavaScript : les attaques XSS (Cross-Site Scripting) injecté par un utilisateur malveillant en échappant les caractères HTML potentiellement dangereux . Par défaut, htmlspecialchars échappe les caractères suivants :
+
+            & (ampersand) devient &amp;
+            < (inférieur) devient &lt;
+            > (supérieur) devient &gt;
+            " (guillemet double) devient &quot;*/
+
+        /*
+            ENT_QUOTES : est une constante en PHP  qui onvertit les guillemets simples et doubles. => ' (guillemet simple) devient &#039; 
+            'UTF-8' : Spécifie que l'encodage utilisé est UTF-8.
+        */
+    }
+
+
+
+
+    $cnx = connexionBDD();
+    $sql = "UPDATE films SET
+    (category_id, title, director, actors, duration, synopsis, date, price, stock, ageLimit, image) VALUES (:category_id, :title, :director, :actors, :duration, :synopsis, :date, :price, :stock, :ageLimit, :image, category_id = :category_id WHERE id_film = :id_film)";
+
+    $request = $cnx -> prepare($sql);
+    //prepare() est une méthode qui permet de préparer la requête sans l'exécuter. Elle contient un marqueur :nom qui est vide et attend une valeur.
+    //$requet est à cette ligne  encore un objet PDOstatement.
+    
+    $request->execute(array(
+        ':category_id' => $data['category_id'],
+        ':title' => $data['title'],
+        ':director' => $data['director'],
+        ':actors' => $data['actors'],
+        // ':genre' => $data['genre'],
+        ':duration' => $data['duration'],
+        ':synopsis' => $data['synopsis'],
+        ':date' => $data['date'],
+        ':price' => $data['price'],
+        ':stock' => $data['stock'],
+        ':ageLimit' => $data['ageLimit'],
+        ':image' => $data['image']
+        
+    ));//execute() permet d'éxecuter toute la requête préparée avec prepare()
+}
+
+
+
+
+
 
 ?>

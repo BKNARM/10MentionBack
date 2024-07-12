@@ -9,12 +9,47 @@ if(empty($_SESSION['user']) ) {
 
 }else{
 
-if ( $_SESSION['user']['role'] == 'ROLE_USER') {
+    if ( $_SESSION['user']['role'] == 'ROLE_USER') {
 
-    header("location:".RACINE_SITE."index.php");
+        header("location:".RACINE_SITE."index.php");
+    }
+
 }
 
+
+
+//supprimer un film
+
+if (isset($_GET) && isset($_GET['action']) && isset($_GET['id_film']) && !empty($_GET['action']) && !empty($_GET['id_film'])) {
+
+    $idCategory = htmlentities($_GET['id_film']);
+
+    if (is_numeric($idFilm)) {
+
+        $film = showFilm($idFilm);
+        if ($film) {
+
+            
+            deleteFilm($idFilm);
+            header('location:films.php');
+            
+        }else {
+
+            header('location:films.php');
+        }
+
+        
+    } else {
+
+        header('location:films.php');
+    }
 }
+
+
+
+
+
+
     $films = allFilm();
 
 require_once "../inc/header.inc.php";
@@ -93,7 +128,7 @@ require_once "../inc/header.inc.php";
                             <td> <?=substr($film['synopsis'],0, 50) ?>...</td>
                             <td> <?= $film['date'] ?></td>
                             <td class="text-center"><a href="?action=delete&id_film=<?= $film['id_film'] ?>"><i class="bi bi-trash3-fill"></i></a></td>
-                            <td class="text-center"><a href="?action=update&id_film=<?= $film['id_film'] ?>"><i class="bi bi-pen-fill"></i></a></td>
+                            <td class="text-center"><a href="gestionFilm.php?action=update&id_film=<?= $film['id_film'] ?>"><i class="bi bi-pen-fill"></i></a></td>
 
                         </tr>
 
