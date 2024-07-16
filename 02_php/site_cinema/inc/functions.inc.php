@@ -855,7 +855,34 @@ function modifierFilm(int $category_id, string $titleFilm, string $director, str
 
 
 
+#####################################################fonction FILMS BY DATE###########################################################################
+
+function filmByDate() :mixed{
+    $cnx = connexionBDD();
+    $sql = "SELECT * FROM films ORDER BY date DESC LIMIT 6";
+    $request = $cnx -> query($sql);
+   $result= $request ->fetchAll();
+    return $result;
+
+}
 
 
 
+
+#########################################################Films BY CATEGORY############################################################################################
+
+
+
+function filmsByCategory($id){
+
+    $cnx = connexionBDD();
+    $sql = "SELECT * FROM films WHERE category_id = :id";
+    $request = $cnx -> prepare($sql);
+    $request ->execute(array(
+            ':id' => $id
+    ));
+    $result = $request -> fetchAll();
+    return $result;
+
+}
 ?>

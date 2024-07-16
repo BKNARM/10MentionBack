@@ -27,7 +27,8 @@
     <header>
         <nav class="navbar navbar-expand-lg fixed-top">
             <div class="container-fluid">
-                <h1><a class="navbar-brand" href="#">Movies</a></h1>
+            <h1><a class="navbar-brand" href="<?=RACINE_SITE?>index.php">M <img src="<?=RACINE_SITE?>assets/img/logo.png" alt="" > VIES</a></h1>
+                
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -36,14 +37,31 @@
                         <li class="nav-item">
                             <a class="nav-link " aria-current="page" href="<?= RACINE_SITE ?>index.php">Accueil</a>
                         </li>
+
+
+
+
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="<?= RACINE_SITE ?>index.php" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 Catégories
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="#">Action</a></li>
-                                <li><a class="dropdown-item" href="#">science fiction</a></li>
-                                <li><a class="dropdown-item" href="#">Aventuure</a></li>
+                                <?php
+                                    $categories = allCategories();
+
+                                    foreach ($categories as $key => $categorie) {
+                                        
+                                    
+                                ?>
+
+                                    <li><a class="dropdown-item" href="<?=RACINE_SITE?>index.php?id_category=<?=$categorie['id_category']?>"><?=ucfirst($categorie['name'])?></a></li>
+
+                                <?php
+                                     }
+                                ?>
+
+                                
+                                
                             </ul>
                         </li>
 
@@ -68,7 +86,7 @@
                         ?>
 
                             <li class="nav-item">
-                                <a class="nav-link" href="<?= RACINE_SITE ?>profil.php">Compte<sup class="badge rounded-pill text-bg-danger"><?= $_SESSION['user']['firstName']?></sup>
+                                <a class="nav-link" href="<?= RACINE_SITE ?>profil.php">Compte<sup class="badge rounded-pill text-bg-danger"><?= $_SESSION['user']['firstName'] ?></sup>
                                 </a>
                             </li>
 
@@ -83,7 +101,7 @@
                                         <li><a class="dropdown-item text-dark fs-4" href="<?= RACINE_SITE ?>admin/categories.php">Catégories</a></li>
                                         <li><a class="dropdown-item text-dark fs-4" href="<?= RACINE_SITE ?>admin/films.php">Films</a></li>
                                         <li><a class="dropdown-item text-dark fs-4" href="<?= RACINE_SITE ?>admin/gestionFilm.php">Gestion Film</a></li>
-                                        <li><a class="dropdown-item text-dark fs-4" href="<?= RACINE_SITE ?>admin/users.php">utilisateurs</a></li>   
+                                        <li><a class="dropdown-item text-dark fs-4" href="<?= RACINE_SITE ?>admin/users.php">utilisateurs</a></li>
                                     </ul>
 
                                 </li>
@@ -100,7 +118,7 @@
                             </li>
                         <?php
 
-                           
+
                         }
 
                         ?>

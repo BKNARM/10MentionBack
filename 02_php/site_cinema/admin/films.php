@@ -58,7 +58,7 @@ require_once "../inc/header.inc.php";
 <div class="d-flex flex-column m-auto mt-5">
 
     <h2 class="text-center fw-bolder mb-5 text-danger">Liste des films</h2>
-    <a href="gestionFilms.php" class="btn align-self-end"> Ajouter un film</a>
+    <a href="gestionFilm.php" class="btn align-self-end"> Ajouter un film</a>
     <table class="table table-dark table-bordered mt-5 " >
             <thea>
                     <tr >

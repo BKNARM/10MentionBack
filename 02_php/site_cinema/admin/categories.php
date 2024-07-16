@@ -91,7 +91,7 @@ if (isset($_GET) && isset($_GET['action']) && isset($_GET['id_category']) && !em
     $idCategory = htmlentities($_GET['id_category']);
 
 
-    if (is_numeric($id_category)) {
+    if (is_numeric($idCategory)) {
 
         $category = showCategoryViaID($idCategory);
         if ($category) {

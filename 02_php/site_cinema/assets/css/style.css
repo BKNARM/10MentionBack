@@ -72,7 +72,7 @@ nav .navbar-toggler {
 }
 
 main{
-    padding: 10rem 4rem;
+    padding: 10rem 4rem !important;
     /* margin-top: 10rem !important; */
     min-height: 815px; /* je le met afin d'empêcher le footer de rementer dans la page*/
     transition: all .2s;
