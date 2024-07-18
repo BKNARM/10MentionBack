@@ -885,4 +885,26 @@ function filmsByCategory($id){
     return $result;
 
 }
+
+
+#########################################################fonction pour afficher les films des differents categories############################################################################################
+
+
+function afficherFilms($id){
+
+    $cnx = connexionBDD();
+    $sql = "SELECT * FROM films WHERE category_id = :id";
+    $request = $cnx -> prepare($sql);
+    $request ->execute(array(
+            ':id' => $id
+    ));
+
+}
+
+
+
+
+
+
+
 ?>
