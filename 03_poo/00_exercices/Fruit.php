@@ -71,6 +71,6 @@ $fruit_1 = new Fruit("fraise", "Rouge");
 
 //Afficher les informations du fruit en utilisant les méthodes getNom() et getCouleur()
 
-echo $fruit_1->
+
 
 
